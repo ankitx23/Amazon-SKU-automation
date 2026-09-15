@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Excel Compare Tool</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-xl">
+    
+    <h1 class="text-2xl font-bold text-center mb-6 text-gray-800">
+      📊 Amazon Marketplace Tool
+    </h1>
+
+    <form id="uploadForm" class="space-y-4">
+
+      <!-- File Inputs -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Amazon File</label>
+        <input type="file" name="amazon" class="w-full mt-1 p-2 border rounded-lg">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-600">File 1</label>
+        <input type="file" name="file1" class="w-full mt-1 p-2 border rounded-lg">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-600">File 2</label>
+        <input type="file" name="file2" class="w-full mt-1 p-2 border rounded-lg">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-600">File 3</label>
+        <input type="file" name="file3" class="w-full mt-1 p-2 border rounded-lg">
+      </div>
+
+      <!-- Button -->
+      <button 
+        type="submit"
+        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+      >
+        Upload & Compare
+      </button>
+
+    </form>
+
+    <!-- Loader -->
+    <div id="loading" class="hidden text-center mt-4 text-blue-600 font-medium">
+      Processing files...
+    </div>
+
+    <!-- Result -->
+    <div id="result" class="mt-4 text-sm text-gray-700 text-center"></div>
+
+  </div>
+
+<script>
+document.getElementById("uploadForm").onsubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+
+    document.getElementById("loading").classList.remove("hidden");
+    document.getElementById("result").innerText = "";
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/upload/", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        document.getElementById("result").innerText =
+            "✅ Done! Files processed successfully.";
+
+    } catch (error) {
+        document.getElementById("result").innerText =
+            "❌ Error processing files.";
+    }
+
+    document.getElementById("loading").classList.add("hidden");
+};
+</script>
+
+</body>
+</html>
